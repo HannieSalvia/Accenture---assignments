@@ -1,0 +1,394 @@
+=========================
+INSERT DATA
+=========================
+
+db.products.insertMany([
+{
+ name:"iPhone 14",
+ category:"Electronics",
+ price:75000,
+ stock:25,
+ brand:"Apple"
+},
+{
+ name:"Samsung Galaxy S22",
+ category:"Electronics",
+ price:65000,
+ stock:30,
+ brand:"Samsung"
+},
+{
+ name:"Dell Laptop",
+ category:"Computers",
+ price:55000,
+ stock:15,
+ brand:"Dell"
+},
+{
+ name:"HP Pavilion Laptop",
+ category:"Computers",
+ price:50000,
+ stock:12,
+ brand:"HP"
+},
+{
+ name:"Nike Shoes",
+ category:"Fashion",
+ price:5000,
+ stock:50,
+ brand:"Nike"
+},
+{
+ name:"Adidas T-shirt",
+ category:"Fashion",
+ price:1500,
+ stock:80,
+ brand:"Adidas"
+},
+{
+ name:"Sony Headphones",
+ category:"Electronics",
+ price:3000,
+ stock:40,
+ brand:"Sony"
+},
+{
+ name:"Wooden Dining Table",
+ category:"Furniture",
+ price:20000,
+ stock:5,
+ brand:"IKEA"
+},
+{
+ name:"Office Chair",
+ category:"Furniture",
+ price:7000,
+ stock:20,
+ brand:"Godrej"
+},
+{
+ name:"Bluetooth Speaker",
+ category:"Electronics",
+ price:2500,
+ stock:60,
+ brand:"JBL"
+}
+])
+
+=========================
+FIND OPERATIONS
+=========================
+
+1)
+db.products.find()
+
+Output:
+Shows all product documents
+
+
+2)
+db.products.find().pretty()
+
+Output:
+Shows all products in formatted structure
+
+
+3)
+db.products.findOne({name:"iPhone 14"})
+
+Output:
+Returns iPhone 14 details
+
+
+4)
+db.products.find({category:"Electronics"})
+
+Output:
+iPhone 14
+Samsung Galaxy S22
+Sony Headphones
+Bluetooth Speaker
+
+
+5)
+db.products.find({price:{$lt:5000}})
+
+Output:
+Adidas T-shirt
+Sony Headphones
+Bluetooth Speaker
+
+
+6)
+db.products.find({price:{$lte:5000}})
+
+Output:
+Nike Shoes
+Adidas T-shirt
+Sony Headphones
+Bluetooth Speaker
+
+
+7)
+db.products.find({price:{$gt:5000}})
+
+Output:
+iPhone 14
+Samsung Galaxy S22
+Dell Laptop
+HP Pavilion Laptop
+Office Chair
+Wooden Dining Table
+
+
+8)
+db.products.find({price:{$gte:5000}})
+
+Output:
+Nike Shoes
+iPhone 14
+Samsung Galaxy S22
+Dell Laptop
+HP Pavilion Laptop
+Office Chair
+Wooden Dining Table
+
+
+9)
+db.products.find({price:{$ne:5000}})
+
+Output:
+All products except Nike Shoes
+
+
+10)
+db.products.find({price:{$in:[1000,2000,5000]}})
+
+Output:
+Nike Shoes
+
+
+11)
+db.products.find({price:{$nin:[1000,2000,5000]}})
+
+Output:
+All products except Nike Shoes
+
+
+12)
+db.products.find({
+category:"Electronics",
+price:5000
+})
+
+Output:
+No matching products found
+
+
+13)
+db.products.find({
+$or:[
+{category:"Electronics"},
+{brand:"Apple"}
+]
+})
+
+Output:
+iPhone 14
+Samsung Galaxy S22
+Sony Headphones
+Bluetooth Speaker
+
+
+14)
+db.products.find({
+$or:[
+{price:{$gt:5000}},
+{brand:"Samsung"}
+]
+})
+
+Output:
+iPhone 14
+Samsung Galaxy S22
+Dell Laptop
+HP Pavilion Laptop
+Office Chair
+Wooden Dining Table
+
+
+15)
+db.products.find({
+price:{
+$gte:5000,
+$lte:20000
+}
+})
+
+Output:
+Nike Shoes
+Office Chair
+Wooden Dining Table
+
+
+16)
+db.products.find({
+price:{
+$not:{$gt:5000}
+}
+})
+
+Output:
+Nike Shoes
+Adidas T-shirt
+Sony Headphones
+Bluetooth Speaker
+
+
+=========================
+UPDATE OPERATIONS
+=========================
+
+1)
+db.products.updateOne(
+{name:"iPhone 14"},
+{$set:{name:"iPhone 15"}}
+)
+
+Output:
+Product name updated successfully
+
+
+2)
+db.products.updateMany(
+{price:{$lt:5000}},
+{$set:{stock:100}}
+)
+
+Output:
+Stock updated for products below 5000
+
+
+3)
+db.products.updateOne(
+{brand:"Dell"},
+{$set:{price:60000}}
+)
+
+Output:
+Dell Laptop price updated
+
+
+4)
+db.products.updateMany(
+{category:"Electronics"},
+{$set:{stock:70}}
+)
+
+Output:
+Stock updated for electronics products
+
+
+5)
+db.products.replaceOne(
+{name:"Nike Shoes"},
+{
+name:"Puma Shoes",
+category:"Fashion",
+price:5500,
+stock:60,
+brand:"Puma"
+}
+)
+
+Output:
+Nike Shoes document replaced
+
+
+=========================
+DELETE OPERATIONS
+=========================
+
+1)
+db.products.deleteOne(
+{name:"Office Chair"}
+)
+
+Output:
+Office Chair removed
+
+
+2)
+db.products.deleteOne(
+{price:{$lt:2000}}
+)
+
+Output:
+Adidas T-shirt removed
+
+
+3)
+db.products.deleteMany({})
+
+Output:
+All documents deleted
+
+
+=========================
+PROJECTION
+=========================
+
+1)
+db.products.find(
+{},
+{name:1,price:1}
+)
+
+Output:
+Displays only product name and price
+
+
+2)
+db.products.find(
+{},
+{_id:0,name:1,price:1}
+)
+
+Output:
+Displays product name and price without id
+
+
+=========================
+LIMIT & PAGINATION
+=========================
+
+1)
+db.products.find().limit(5)
+
+Output:
+Displays first 5 products
+
+
+2)
+db.products.find().skip(5).limit(5)
+
+Output:
+Displays next 5 products
+
+
+=========================
+SORTING
+=========================
+
+1)
+db.products.find().sort({price:1})
+
+Output:
+Products sorted in ascending order
+
+
+2)
+db.products.find().sort({price:-1})
+
+Output:
+Products sorted in descending order
